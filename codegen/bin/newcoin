@@ -18,12 +18,17 @@ def self.coin_type(path)
     path.split('/')[2].chomp("'")
 end
 
-# Transforms a coin name to a C++ name
-def self.format_name(coin)
-    formatted = coin['name']
+# Transforms an ID to a C++ casing ID
+def self.format_id(id)
+    formatted = id
     #formatted = formatted.sub(/^([a-z]+)/, &:upcase)
     formatted = formatted.sub(/\s/, '')
     formatted
+end
+
+# Transforms a coin name to a C++ name
+def self.format_name(coin)
+    format_id(coin['name'])
 end
 
 def self.format_name_lowercase(coin)

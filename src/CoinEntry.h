@@ -6,9 +6,14 @@
 
 #pragma once
 
+#include <TrustWalletCore/TWBlockchain.h>
 #include <TrustWalletCore/TWCoinType.h>
+#include <TrustWalletCore/TWCurve.h>
+#include <TrustWalletCore/TWHDVersion.h>
+#include <TrustWalletCore/TWPurpose.h>
 
 #include "Data.h"
+#include "DerivationPath.h"
 #include "PublicKey.h"
 #include "PrivateKey.h"
 
@@ -23,10 +28,21 @@ class CoinEntry {
 public:
     // Report the coin types this implementation is responsible of
     virtual std::vector<TWCoinType> coinTypes() const = 0;
+
+    // Coin properties
+    virtual TWBlockchain blockchain() const { return TWBlockchainBitcoin; /* placeholder */ }
+    virtual TWPurpose purpose() const { return TWPurposeBIP44; /* placeholder */ }
+    virtual TWCurve curve() const { return TWCurveSECP256k1; /* placeholder */ }
+    virtual TWHDVersion hdVersion() const { return TWHDVersionNone; /* placeholder */ }
+    virtual TWHDVersion xprvVersion() const { return TWHDVersionNone; /* placeholder */ }
+    virtual DerivationPath derivationPath() const { return DerivationPath(); }
+
+    // Address handling
     virtual bool validateAddress(TWCoinType coin, const std::string& address, TW::byte p2pkh, TW::byte p2sh, const char* hrp) const = 0;
     // normalizeAddress is optional, it may leave this default, no-change implementation
     virtual std::string normalizeAddress(TWCoinType coin, const std::string& address) const { return address; }
     virtual std::string deriveAddress(TWCoinType coin, const PublicKey& publicKey, TW::byte p2pkh, const char* hrp) const = 0;
+
     // Signing
     virtual void sign(TWCoinType coin, const Data& dataIn, Data& dataOut) const = 0;
     virtual bool supportsJSONSigning() const { return false; }

@@ -15,8 +15,17 @@ namespace TW::<%= format_name(coin) %> {
 class Entry: public CoinEntry {
 public:
     virtual std::vector<TWCoinType> coinTypes() const { return {TWCoinType<%= format_name(coin) %>}; }
+
+    virtual TWBlockchain blockchain() const { return TWBlockchain<%= coin['blockchain'] %>; }
+    virtual TWPurpose purpose() const { return TWPurposeBIP44; }
+    virtual TWCurve curve() const { return TWCurve<%= format_id(coin['curve']).upcase %>; }
+    virtual TWHDVersion hdVersion() const { return TWHDVersion<% if coin['xpub'].nil? -%>None<% else -%><%= format_id(coin['xpub']) %><% end -%>; }
+    virtual TWHDVersion xprvVersion() const { return TWHDVersion<% if coin['xprv'].nil? -%>None<% else -%><%= format_id(coin['xprv']) %><% end -%>; }
+    virtual DerivationPath derivationPath() const { return "<%= coin['derivationPath'] %>""; }
+
     virtual bool validateAddress(TWCoinType coin, const std::string& address, TW::byte p2pkh, TW::byte p2sh, const char* hrp) const;
     virtual std::string deriveAddress(TWCoinType coin, const PublicKey& publicKey, TW::byte p2pkh, const char* hrp) const;
+
     virtual void sign(TWCoinType coin, const Data& dataIn, Data& dataOut) const;
     // normalizeAddress(): implement this if needed, e.g. Ethereum address is EIP55 checksummed
     // plan(): implement this if the blockchain is UTXO based
