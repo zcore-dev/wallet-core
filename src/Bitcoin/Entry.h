@@ -23,6 +23,7 @@ public:
             TWCoinTypeDogecoin,
             TWCoinTypeLitecoin,
             TWCoinTypeMonacoin,
+            TWCoinTypeZCore,
             TWCoinTypeQtum,
             TWCoinTypeRavencoin,
             TWCoinTypeViacoin,
